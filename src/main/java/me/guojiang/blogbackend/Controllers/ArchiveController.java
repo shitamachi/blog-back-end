@@ -1,6 +1,6 @@
 package me.guojiang.blogbackend.Controllers;
 
-import me.guojiang.blogbackend.Repositories.ArticleRepository;
+import me.guojiang.blogbackend.Repositories.ArchiveRepository;
 import me.guojiang.blogbackend.Models.Archive;
 import me.guojiang.blogbackend.Models.JsonResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,25 +8,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/archives")
 public class ArchiveController {
 
-    private final ArticleRepository repository;
+    private final ArchiveRepository repository;
 
-    public ArchiveController(ArticleRepository repository) {
+    public ArchiveController(ArchiveRepository repository) {
         this.repository = repository;
     }
 
+    /* bad code design but it works, we will refactor all about Archive design */
     @GetMapping
-    public JsonResult<List<Archive>> index() {
+    public JsonResult<ArrayList<Archive>> index() {
         var archives = new ArrayList<Archive>();
-        repository.findAll().forEach(article -> archives.add(new Archive(article.getTitle(), article.getDate())));
-        return new JsonResult<List<Archive>>()
-                .setData(archives)
-                .setCode(200)
-                .setMsg("successful");
+        var results = repository.findArticleGroupByYearAndMonthAndDay();
+        results.forEach(r -> archives.add(
+                new Archive(r[0].toString(), r[1].toString(), r[2].toString(), r[3].toString(),
+                        repository.findArticleByYearAndMonthAndDay(
+                                r[0].toString(),
+                                r[1].toString(),
+                                r[2].toString()))));
+        return new JsonResult<>(archives).setCode(200).setMsg("successful");
     }
 }

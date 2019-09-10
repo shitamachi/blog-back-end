@@ -1,6 +1,6 @@
 package me.guojiang.blogbackend.Controllers;
 import me.guojiang.blogbackend.Services.IService;
-import me.guojiang.blogbackend.Services.MySqlService;
+import me.guojiang.blogbackend.Services.ArticleService;
 import me.guojiang.blogbackend.Models.Article;
 import me.guojiang.blogbackend.Models.JsonResult;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ArticleController {
     private IService<Article> service;
 
-    public ArticleController(MySqlService service) {
+    public ArticleController(ArticleService service) {
         this.service = service;
     }
 

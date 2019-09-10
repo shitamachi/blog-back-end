@@ -10,13 +10,13 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
     @Column(length = 250)
     private String preview;
-    @Column
+    @Column(columnDefinition = "text", nullable = false)
     private String content;
-    @Column
+    @Column(nullable = false)
     private LocalDateTime date;
 
     public Long getId() {

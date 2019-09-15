@@ -1,9 +1,12 @@
 package me.guojiang.blogbackend.Repositories;
 
 import me.guojiang.blogbackend.Models.Article;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -43,5 +46,12 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
     @Override
     void deleteAll();
 
-    Article deleteArticleById(Long id);
+    @Query(value = "select article.id, article.content, article.date, article.preview, article.title" +
+            " from article," +
+            " category_article," +
+            " category" +
+            " where article.id = category_article.article_id" +
+            " and category.id = category_article.category_id" +
+            " and category.id = :id", nativeQuery = true)
+    List<Article> getAllArticlesByCategotyId(@Param("id") Integer id);
 }

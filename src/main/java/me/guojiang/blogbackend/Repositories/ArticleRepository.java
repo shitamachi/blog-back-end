@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface ArticleRepository extends CrudRepository<Article, Long> {
-//    Article getArticleById(String id);
 
     @Override
     <S extends Article> S save(S s);
@@ -54,4 +53,13 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
             " and category.id = category_article.category_id" +
             " and category.id = :id", nativeQuery = true)
     List<Article> getAllArticlesByCategotyId(@Param("id") Integer id);
+
+    @Query(value = "select article.id, content, date, preview, title" +
+            " from article," +
+            " tag_article," +
+            " tag" +
+            " where article.id = tag_article.article_id" +
+            " and tag.id = tag_article.tag_id" +
+            " and tag.id = :id", nativeQuery = true)
+    List<Article> getAllArticlesByTagId(@Param("id") Integer id);
 }

@@ -1,6 +1,5 @@
 package me.guojiang.blogbackend.Repositories;
 
-import me.guojiang.blogbackend.Models.Article;
 import me.guojiang.blogbackend.Models.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,13 +22,4 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Override
     List<Category> findAll();
 
-
-    @Query(value = "select article.id, content, date, preview, title" +
-            " from article," +
-            " category_article," +
-            " category" +
-            " where article.id = category_article.article_id" +
-            " and category.id = category_article.category_id" +
-            " and category.id = :id", nativeQuery = true)
-    List<Article> getAllArticlesUsingCategotyId(@Param("id") Long id);
 }

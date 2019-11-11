@@ -1,12 +1,14 @@
 package me.guojiang.blogbackend.Controllers;
-import me.guojiang.blogbackend.Services.IService;
-import me.guojiang.blogbackend.Services.ArticleService;
+
 import me.guojiang.blogbackend.Models.Article;
 import me.guojiang.blogbackend.Models.JsonResult;
+import me.guojiang.blogbackend.Services.ArticleService;
+import me.guojiang.blogbackend.Services.IService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -21,8 +23,8 @@ public class ArticleController {
     public JsonResult<List<Article>> getAllArticles() {
         return new JsonResult<List<Article>>().
                 setData(service.getAll()).
-                setCode(200).
-                setMsg("successful");
+                setStatus(200).
+                setMessage("successful");
     }
 
 
@@ -30,8 +32,8 @@ public class ArticleController {
     public JsonResult<Article> getArticleById(@PathVariable Long id) {
         return new JsonResult<Article>()
                 .setData(service.getOneById(id))
-                .setCode(200)
-                .setMsg("successful");
+                .setStatus(200)
+                .setMessage("successful");
     }
 
     @PostMapping("")
@@ -55,6 +57,15 @@ public class ArticleController {
             }
         }
         return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public JsonResult<Map<String, Boolean>> deleteArticleById(@PathVariable String id) {
+        var toDeleteOne = service.getOneById(Long.valueOf(id));
+        if (toDeleteOne == null)
+            return new JsonResult<>(Map.of("isDeleted", Boolean.FALSE)).setStatus(404).setMessage("删除文章不存在");
+        service.deleteOne(toDeleteOne);
+        return new JsonResult<>(Map.of("isDeleted", Boolean.TRUE)).setStatus(200).setMessage("删除OK");
     }
 
     @PutMapping("")

@@ -1,8 +1,8 @@
 package me.guojiang.blogbackend.Models;
 
 public class JsonResult<T> {
-    private Integer code;
-    private String msg;
+    private Integer status;
+    private String message;
     private T data;
 
     public JsonResult() {
@@ -11,7 +11,6 @@ public class JsonResult<T> {
     public JsonResult(T data) {
         this.data = data;
     }
-
 
     public T getData() {
         return data;
@@ -22,21 +21,21 @@ public class JsonResult<T> {
         return this;
     }
 
-    public Integer getCode() {
-        return code;
+    public Integer getStatus() {
+        return status;
     }
 
-    public JsonResult<T> setCode(Integer code) {
-        this.code = code;
+    public JsonResult<T> setStatus(Integer status) {
+        this.status = status;
         return this;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public JsonResult<T> setMsg(String msg) {
-        this.msg = msg;
+    public JsonResult<T> setMessage(String message) {
+        this.message = message;
         return this;
     }
 }

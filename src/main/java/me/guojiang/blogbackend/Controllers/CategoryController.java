@@ -29,12 +29,12 @@ public class CategoryController {
             var articles = service.getAllArticlesByCategoryId(category.getId());
             categoryViews.add(new CategoryView(category, articles));
         });
-        return new JsonResult<>(categoryViews).setCode(200).setMsg("successful!");
+        return new JsonResult<>(categoryViews).setStatus(200).setMessage("successful!");
     }
 
     @GetMapping("/{id}")
     public JsonResult<List<Category>> getAllCategoriesByArticleId(@PathVariable Long id) {
-        return new JsonResult<>(service.getAllByArticleId(id)).setCode(200).setMsg("successful!");
+        return new JsonResult<>(service.getAllByArticleId(id)).setStatus(200).setMessage("successful!");
     }
 
 }

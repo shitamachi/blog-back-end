@@ -29,10 +29,10 @@ public class TagController {
             var articles = service.getAllArticlesByTagId(tag.getId());
             categoryViews.add(new TagView(tag, articles));
         });
-        return new JsonResult<>(categoryViews).setCode(200).setMsg("successful!");
+        return new JsonResult<>(categoryViews).setStatus(200).setMessage("successful!");
     }
 
     @GetMapping("/{id}")
     public JsonResult<List<Tag>> getAllTagsByArticleId(@PathVariable Long id) {
-        return new JsonResult<>(service.getAllByArticleId(id)).setCode(200).setMsg("successful!");    }
+        return new JsonResult<>(service.getAllByArticleId(id)).setStatus(200).setMessage("successful!");    }
 }

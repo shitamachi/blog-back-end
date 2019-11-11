@@ -30,6 +30,6 @@ public class ArchiveController {
                                 r[0].toString(),
                                 r[1].toString(),
                                 r[2].toString()))));
-        return new JsonResult<>(archives).setCode(200).setMsg("successful");
+        return new JsonResult<>(archives).setStatus(200).setMessage("successful");
     }
 }

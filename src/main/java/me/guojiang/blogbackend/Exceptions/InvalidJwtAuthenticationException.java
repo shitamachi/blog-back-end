@@ -1,4 +1,4 @@
-package me.guojiang.blogbackend.Security;
+package me.guojiang.blogbackend.Exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

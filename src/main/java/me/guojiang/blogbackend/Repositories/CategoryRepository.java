@@ -12,7 +12,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query(value =
-            "select c.id, c.name, c.gmt_create, c.gmt_modified" +
+            "select c.id, c.name, c.gmt_create, c.count, c.description" +
             " from article" +
             " join category_article ca on article.id = ca.article_id" +
             " join category c on ca.category_id = c.id" +

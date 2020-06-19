@@ -31,4 +31,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### properties ###
 application-dev.properties
+application-prod.properties
+
+### jRebel ###
+/src/main/resources/rebel.xml

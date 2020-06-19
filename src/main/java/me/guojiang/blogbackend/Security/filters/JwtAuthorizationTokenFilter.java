@@ -1,6 +1,8 @@
-package me.guojiang.blogbackend.Security;
+package me.guojiang.blogbackend.Security.filters;
 
-import org.springframework.context.annotation.Bean;
+import me.guojiang.blogbackend.Exceptions.InvalidJwtAuthenticationException;
+import me.guojiang.blogbackend.Security.JwtAuthenticationEntryPoint;
+import me.guojiang.blogbackend.Security.providers.JwtTokenProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -24,6 +26,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 if (authentication != null) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    logger.debug(authentication.toString());
                 }
 
             }
@@ -42,7 +45,6 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @Bean
     public AuthenticationEntryPoint getAuthenticationEntryPoint() {
         return new JwtAuthenticationEntryPoint();
     }

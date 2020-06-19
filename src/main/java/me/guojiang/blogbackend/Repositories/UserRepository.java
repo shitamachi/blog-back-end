@@ -1,7 +1,6 @@
 package me.guojiang.blogbackend.Repositories;
 
 import me.guojiang.blogbackend.Models.User;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -14,7 +13,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     boolean existsByUsername(String username);
 
-    //
-//    @Query("")
-//    User addUser(User user);
+    User getUserByEmail(String email);
 }

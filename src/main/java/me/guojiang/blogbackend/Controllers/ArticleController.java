@@ -3,7 +3,7 @@ package me.guojiang.blogbackend.Controllers;
 import me.guojiang.blogbackend.Models.Article;
 import me.guojiang.blogbackend.Models.JsonResult;
 import me.guojiang.blogbackend.Services.ArticleService;
-import me.guojiang.blogbackend.Services.IService;
+import me.guojiang.blogbackend.Services.interfaces.IService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
-    private IService<Article> service;
+    private final IService<Article> service;
 
     public ArticleController(ArticleService service) {
         this.service = service;
@@ -60,8 +60,8 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public JsonResult<Map<String, Boolean>> deleteArticleById(@PathVariable String id) {
-        var toDeleteOne = service.getOneById(Long.valueOf(id));
+    public JsonResult<Map<String, Boolean>> deleteArticleById(@PathVariable long id) {
+        var toDeleteOne = service.getOneById(id);
         if (toDeleteOne == null)
             return new JsonResult<>(Map.of("isDeleted", Boolean.FALSE)).setStatus(404).setMessage("删除文章不存在");
         service.deleteOne(toDeleteOne);

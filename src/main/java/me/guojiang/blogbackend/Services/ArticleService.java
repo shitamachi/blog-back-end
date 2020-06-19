@@ -2,6 +2,7 @@ package me.guojiang.blogbackend.Services;
 
 import me.guojiang.blogbackend.Repositories.ArticleRepository;
 import me.guojiang.blogbackend.Models.Article;
+import me.guojiang.blogbackend.Services.interfaces.IService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

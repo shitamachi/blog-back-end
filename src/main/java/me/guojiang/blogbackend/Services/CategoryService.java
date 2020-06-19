@@ -4,10 +4,12 @@ import me.guojiang.blogbackend.Models.Article;
 import me.guojiang.blogbackend.Models.Category;
 import me.guojiang.blogbackend.Repositories.ArticleRepository;
 import me.guojiang.blogbackend.Repositories.CategoryRepository;
+import me.guojiang.blogbackend.Services.interfaces.IService;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService implements IService<Category> {
@@ -35,12 +37,17 @@ public class CategoryService implements IService<Category> {
 
     @Override
     public Category addOne(Category x) {
-        return null;
+        return repository.save(x);
     }
 
     @Override
     public boolean deleteOne(Category d) {
         return false;
+    }
+
+    public List<Category> deleteAll(List<Category> categories) {
+        repository.deleteAll(categories);
+        return categories.stream().filter(category -> repository.existsById(category.getId())).collect(Collectors.toList());
     }
 
     @Override

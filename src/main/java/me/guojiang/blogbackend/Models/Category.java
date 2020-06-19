@@ -13,11 +13,17 @@ public class Category {
     @Column(length = 50)
     private String name;
 
-    @Column(name = "gmt_create")
-    private LocalDate gmtCreate;
+    @Column(name = "count", nullable = false)
+    private Integer count;
 
-    @Column(name = "gmt_modified")
-    private LocalDate gmtModified;
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "gmt_create")
+    private LocalDate createDate;
+
+//    @Column(name = "gmt_modified")
+//    private LocalDate modifiyDate;
 
     public Integer getId() {
         return id;
@@ -35,19 +41,27 @@ public class Category {
         this.name = name;
     }
 
-    public LocalDate getGmtCreate() {
-        return gmtCreate;
+    public LocalDate getCreateDate() {
+        return createDate;
     }
 
-    public void setGmtCreate(LocalDate gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
     }
 
-    public LocalDate getGmtModified() {
-        return gmtModified;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setGmtModified(LocalDate gmtModified) {
-        this.gmtModified = gmtModified;
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

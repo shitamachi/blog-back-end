@@ -1,23 +1,21 @@
 package me.guojiang.blogbackend.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.JwtException;
+import me.guojiang.blogbackend.Exceptions.InvalidJwtAuthenticationException;
 import me.guojiang.blogbackend.Models.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final static Logger log = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
 
     @Override
     public void commence(HttpServletRequest httpServletRequest,
@@ -37,7 +35,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             newUnAuthenticatedErrorResponse(httpServletResponse, "expired or invalid JWT token");
         }
-
         log.debug("执行");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         newUnAuthenticatedErrorResponse(httpServletResponse, "JwtAuthenticationEntryPoint");

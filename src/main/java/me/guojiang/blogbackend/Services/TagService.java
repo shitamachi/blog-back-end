@@ -4,10 +4,12 @@ import me.guojiang.blogbackend.Models.Article;
 import me.guojiang.blogbackend.Models.Tag;
 import me.guojiang.blogbackend.Repositories.ArticleRepository;
 import me.guojiang.blogbackend.Repositories.TagRepository;
+import me.guojiang.blogbackend.Services.interfaces.IService;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TagService implements IService<Tag> {
@@ -35,7 +37,7 @@ public class TagService implements IService<Tag> {
 
     @Override
     public Tag addOne(Tag x) {
-        return null;
+        return tagRepository.save(x);
     }
 
     @Override
@@ -43,9 +45,16 @@ public class TagService implements IService<Tag> {
         return false;
     }
 
+    public List<Tag> deleteAll(List<Tag> tags) {
+        tagRepository.deleteAll(tags);
+        return tags.stream()
+                .filter(tag -> tagRepository.existsById(tag.getId()))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public Tag updateOne(Tag u) {
-        return null;
+        return tagRepository.save(u);
     }
 
     @Override

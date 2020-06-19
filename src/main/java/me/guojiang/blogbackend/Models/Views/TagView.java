@@ -11,6 +11,9 @@ public class TagView extends Tag {
     public TagView(Tag tag, List<Article> articles) {
         this.setId(tag.getId());
         this.setName(tag.getName());
+        this.setCount(tag.getCount());
+        this.setCreateDate(tag.getCreateDate()  );
+        this.setDescription(tag.getDescription());
         this.articles = articles;
     }
 

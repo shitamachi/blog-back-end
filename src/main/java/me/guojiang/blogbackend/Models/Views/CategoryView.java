@@ -12,8 +12,9 @@ public class CategoryView extends Category {
     public CategoryView(Category category, List<Article> articles) {
         this.setId(category.getId());
         this.setName(category.getName());
-        this.setGmtCreate(category.getGmtCreate());
-        this.setGmtModified(category.getGmtModified());
+        this.setCreateDate(category.getCreateDate());
+        this.setCount(category.getCount());
+        this.setDescription(category.getDescription());
         this.articles = articles;
     }
 

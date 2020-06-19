@@ -1,10 +1,9 @@
-package me.guojiang.blogbackend.Security;
+package me.guojiang.blogbackend.Security.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.guojiang.blogbackend.Models.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 

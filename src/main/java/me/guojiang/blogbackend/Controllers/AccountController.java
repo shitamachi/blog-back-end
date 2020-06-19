@@ -7,16 +7,24 @@ import me.guojiang.blogbackend.Models.Views.PasswordChangeView;
 import me.guojiang.blogbackend.Models.Views.SignInView;
 import me.guojiang.blogbackend.Models.Views.SignUpView;
 import me.guojiang.blogbackend.Repositories.UserRepository;
-import me.guojiang.blogbackend.Security.JwtTokenProvider;
+import me.guojiang.blogbackend.Security.providers.JwtTokenProvider;
 import me.guojiang.blogbackend.Services.AccountService;
+import me.guojiang.blogbackend.Services.FileService;
+import me.guojiang.blogbackend.Services.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,17 +38,23 @@ public class AccountController {
     private final AccountService accountService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     public AccountController(AuthenticationManager authenticationManager, AccountService accountService,
-                             JwtTokenProvider jwtTokenProvider, UserRepository users) {
+                             FileService fileService, JwtTokenProvider jwtTokenProvider, UserRepository users, EmailService emailService, Environment env) {
         this.authenticationManager = authenticationManager;
         this.accountService = accountService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = users;
+        this.fileService = fileService;
     }
 
     @PostMapping("/signIn")
-    public JsonResult<HashMap<String, Object>> signIn(@RequestBody SignInView signInUser) {
+    public JsonResult<HashMap<String, Object>> signIn(
+            @RequestBody SignInView signInUser,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @AuthenticationPrincipal UserDetails user) {
         var username = signInUser.getUsername();
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, signInUser.getPassword()));
@@ -50,12 +64,24 @@ public class AccountController {
         var model = new HashMap<String, Object>();
         model.put("username", username);
         model.put("token", token);
+        model.put("req-cookie", request.getCookies());
+        model.put("rep-cookie", response.getHeader("Set-Cookie"));
+        model.put("user", user);
         return new JsonResult<>(model).setStatus(200).setMessage("has been signed in");
     }
 
     @PostMapping("/signUp")
     public JsonResult<Map<String, String>> signUp(@RequestBody SignUpView signUpView) {
         return accountService.signUp(signUpView);
+    }
+
+    @PostMapping("signUp/verify")
+    public JsonResult<Map<String, String>> verifyCode(@RequestBody Map<String, String> map) {
+        var email = map.get("email");
+        var code = map.get("code");
+        var username = map.get("username");
+
+        return accountService.verifyAccount(username, email, code);
     }
 
     @GetMapping("/{name}")
@@ -80,7 +106,7 @@ public class AccountController {
 
     @PutMapping()
     public JsonResult<User> updateUserInfo(@RequestBody AccountInfoView newAccountInfo) {
-        //进行校验
+        //TODO 进行校验
         log.debug(SecurityContextHolder.getContext().getAuthentication().toString());
         var currentUser = accountService.getUserInfoByName(newAccountInfo.getUserName());
         currentUser.setEmail(newAccountInfo.getEmail());
@@ -107,18 +133,21 @@ public class AccountController {
         return new JsonResult<>(Map.of("userName", user.getUsername())).setMessage("修改密码错误").setStatus(400);
     }
 
-    @GetMapping("/currentuser")
-    public Object getCurrentUser() {
-        return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @PostMapping("/{name}/avatar")
+    public JsonResult<Map<Object, Object>> setAvatar(@PathVariable String name,
+                                                     @RequestParam("file") MultipartFile file) {
+        var authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!authUser.getUsername().equals(name))
+            return new JsonResult<Map<Object, Object>>().setStatus(404).setMessage("wrong user");
+        var path = fileService.store(file);
+        authUser.setAvatar(path);
+        accountService.updateUser(authUser);
+        return new JsonResult<Map<Object, Object>>(Map.of("path", path)).setStatus(200).setMessage("upload ok!");
     }
 
-//    @PostMapping("/add")
-//    public void addOneArticle(@RequestParam("file") MultipartFile file) {
-//        List<UploadedFile> uploadedFiles = new ArrayList<>();
-//        UploadedFile u = new UploadedFile(file.getOriginalFilename(),
-//                Long.valueOf(file.getSize()).intValue(),
-//                "http://localhost:8080/spring-fileupload/resources/"+file.getOriginalFilename());
-//        uploadedFiles.add(u);
-//        System.out.println(file);
+//    for develop
+//    @GetMapping("/currentuser")
+//    public Object getCurrentUser() {
+//        return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //    }
 }

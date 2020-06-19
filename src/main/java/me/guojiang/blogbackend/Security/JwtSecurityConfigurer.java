@@ -1,9 +1,10 @@
 package me.guojiang.blogbackend.Security;
 
-import org.springframework.context.annotation.Bean;
+import me.guojiang.blogbackend.Security.filters.JwtAuthorizationTokenFilter;
+import me.guojiang.blogbackend.Security.handlers.JwtAccessDeniedHandler;
+import me.guojiang.blogbackend.Security.providers.JwtTokenProvider;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 

@@ -7,7 +7,6 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,7 +75,7 @@ public class User implements UserDetails {
                 Collection<? extends Role> authorities) {
         this(username, password, "", "", "",
                 LocalDateTime.now(), LocalDateTime.now(), authorities,
-                true, true, true);
+                true, true, false);
     }
 
     @Override
